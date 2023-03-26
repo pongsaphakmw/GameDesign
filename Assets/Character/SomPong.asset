@@ -19,4 +19,4 @@ MonoBehaviour:
   characterDamage: 1
   characterSpeed: 5
   characterDefense: 1
-  characterMana: 10
+  characterMana: 30
