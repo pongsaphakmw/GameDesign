@@ -6,9 +6,27 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
+    public float crouchSpeed = 2.0f;
+    public float rotationSpeed = 5f;
+    public float crouchColliderHeight = 1.35f;
+    [Range(0, 1)]
+    public float speedDampTime = 0.1f;
+    [Range(0, 1)]
+    public float velocityDampTime = 0.9f;
+    [Range(0, 1)]
+    public float rotationDampTime = 0.2f;
     public CharacterObject character;
     public HealthBar healthBar;
     public ManaBar manaBar;
+    public StateMachine movementSM;
+    public StandingState standing;
+    // public CrouchingState crouching;
+    public Animator animator;
+    public Vector3 playerVelocity;
+    [HideInInspector]
+    public PlayerInput playerInput;
+    [HideInInspector]
+    public Transform cameraTransform;
     private int currentHealth;
     private int currentMana;
     private Vector2 move;
@@ -22,6 +40,14 @@ public class PlayerController : MonoBehaviour
         currentMana = character.characterMana;
         healthBar.SetMaxHealth(character.characterHealth);
         manaBar.SetMaxMana(character.characterMana);
+
+        // Animation
+        playerInput = GetComponent<PlayerInput>();
+        movementSM = new StateMachine();
+        standing = new StandingState(this, movementSM);
+        // crouching = new CrouchingState(this, movementSM);
+        cameraTransform = Camera.main.transform;
+        movementSM.Initialize(standing);
     }
 
     // Update is called once per frame
@@ -43,6 +69,9 @@ public class PlayerController : MonoBehaviour
             // Debug.Log("U key was pressed.");
             SkillUsed(10);
         }
+        movementSM.currentState.HandleInput();
+ 
+        movementSM.currentState.LogicUpdate();
     }
 
     public void movePlayer(){
@@ -67,5 +96,9 @@ public class PlayerController : MonoBehaviour
         manaBar.SetMana(currentMana);
         // Debug.Log("Current Health: " + currentHealth);
         // Debug.Log("Current Mana: " + currentMana);
+    }
+    private void FixedUpdate()
+    {
+        movementSM.currentState.PhysicsUpdate();
     }
 }

@@ -12,7 +12,7 @@ public class StandingState: State
  
     Vector3 cVelocity;
  
-    public StandingState(Character _character, StateMachine _stateMachine) : base(_character, _stateMachine)
+    public StandingState(PlayerController _character, StateMachine _stateMachine) : base(_character, _stateMachine)
     {
         character = _character;
         stateMachine = _stateMachine;
@@ -28,9 +28,9 @@ public class StandingState: State
         currentVelocity = Vector3.zero;
         gravityVelocity.y = 0;
  
-        playerSpeed = character.playerSpeed;
-        grounded = character.controller.isGrounded;
-        gravityValue = character.gravityValue;    
+        playerSpeed = character.speed;
+        grounded = true;
+        gravityValue = -9.81f;    
     }
  
     public override void HandleInput()
@@ -40,7 +40,7 @@ public class StandingState: State
         
         if (crouchAction.triggered)
         {
-            crouch = true;
+            // crouch = true;
         }
  
         input = moveAction.ReadValue<Vector2>();
@@ -59,7 +59,7 @@ public class StandingState: State
  
         if (crouch)
         {
-            stateMachine.ChangeState(character.crouching);
+            // stateMachine.ChangeState(character.crouching);
         }
         
     }
@@ -69,7 +69,7 @@ public class StandingState: State
         base.PhysicsUpdate();
  
         gravityVelocity.y += gravityValue * Time.deltaTime;
-        grounded = character.controller.isGrounded;
+        grounded = true;
  
         if (grounded && gravityVelocity.y < 0)
         {
@@ -77,7 +77,7 @@ public class StandingState: State
         }
        
         currentVelocity = Vector3.SmoothDamp(currentVelocity, velocity,ref cVelocity, character.velocityDampTime);
-        character.controller.Move(currentVelocity * Time.deltaTime * playerSpeed + gravityVelocity * Time.deltaTime);
+        // character.controller.Move(currentVelocity * Time.deltaTime * playerSpeed + gravityVelocity * Time.deltaTime);
   
         if (velocity.sqrMagnitude>0)
         {
