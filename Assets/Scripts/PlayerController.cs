@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public ManaBar manaBar;
     public StateMachine movementSM;
     public StandingState standing;
+    public CombatState combatting;
     // public CrouchingState crouching;
     public Animator animator;
     public Vector3 playerVelocity;
@@ -48,6 +49,8 @@ public class PlayerController : MonoBehaviour
         // crouching = new CrouchingState(this, movementSM);
         cameraTransform = Camera.main.transform;
         movementSM.Initialize(standing);
+
+        
     }
 
     // Update is called once per frame

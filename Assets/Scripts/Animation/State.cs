@@ -12,6 +12,7 @@ public class State
  
     public InputAction moveAction;
     public InputAction crouchAction;
+    public InputAction drawWeaponAction;
  
     public State(PlayerController _character, StateMachine _stateMachine)
     {
@@ -20,6 +21,7 @@ public class State
  
         moveAction = character.playerInput.actions["Move"];
         crouchAction = character.playerInput.actions["Crouch"];
+        drawWeaponAction = character.playerInput.actions["DrawWeapon"];
  
     }
  
