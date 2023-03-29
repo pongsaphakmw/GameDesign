@@ -42,10 +42,10 @@ public class CombatState : State
             sheathWeapon = true;
         }
 
-        // if (attackAction.triggered)
-        // {
-        //     attack = true;
-        // }
+        if (attackAction.triggered)
+        {
+            attack = true;
+        }
 
         input = moveAction.ReadValue<Vector2>();
         velocity = new Vector3(input.x, 0, input.y);
@@ -59,19 +59,19 @@ public class CombatState : State
     {
         base.LogicUpdate();
 
-        character.animator.SetFloat("Speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
 
         if (sheathWeapon)
         {
-            character.animator.SetTrigger("SheathWeapon");
+            character.animator.SetTrigger("sheathWeapon");
             stateMachine.ChangeState(character.standing);
         }
 
-        // if (attack)
-        // {
-        //     character.animator.SetTrigger("Attack");
-        //     stateMachine.ChangeState(character.attackState);
-        // }
+        if (attack)
+        {
+            character.animator.SetTrigger("attack");
+            stateMachine.ChangeState(character.attacking);
+        }
 
     }
 

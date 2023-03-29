@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public StateMachine movementSM;
     public StandingState standing;
     public CombatState combatting;
+    public AttackState attacking;
     // public CrouchingState crouching;
     public Animator animator;
     public Vector3 playerVelocity;
@@ -46,6 +47,8 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         movementSM = new StateMachine();
         standing = new StandingState(this, movementSM);
+        combatting = new CombatState(this, movementSM);
+        attacking = new AttackState(this, movementSM);
         // crouching = new CrouchingState(this, movementSM);
         cameraTransform = Camera.main.transform;
         movementSM.Initialize(standing);
@@ -59,8 +62,8 @@ public class PlayerController : MonoBehaviour
         movePlayer();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Space key was pressed.");
-            TakeDamage(10);
+            // Debug.Log("Space key was pressed.");
+            // TakeDamage(10);
         }
         if (currentHealth <= 0)
         {
