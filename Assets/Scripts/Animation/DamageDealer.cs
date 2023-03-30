@@ -22,18 +22,19 @@ public class DamageDealer : MonoBehaviour
  
             int layerMask = 1 << 8;
             if (Physics.Raycast(transform.position, -transform.up, out hit, weaponLength, layerMask))
-            // Debug.Log("Hit " + hit.transform.gameObject.name);
             {
+            // Debug.Log("Hit " + hit.transform.gameObject.name);
                 if (!hasDealtDamage.Contains(hit.transform.gameObject)){
                     Debug.Log("Hit " + hit.transform.gameObject.name);
                     hasDealtDamage.Add(hit.transform.gameObject);
+                    DealDamage(hit.transform.gameObject.GetComponent<EnemyController>());
                 }
             }
         }
     }
     public void StartDealDamage()
     {
-        Debug.Log("StartDealDamage");
+        // Debug.Log("StartDealDamage");
         canDealDamage = true;
         hasDealtDamage.Clear();
     }
@@ -46,5 +47,10 @@ public class DamageDealer : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position - transform.up * weaponLength);
+    }
+
+    void DealDamage(EnemyController enemy)
+    {
+        enemy.TakeDamage(weaponDamage);
     }
 }
