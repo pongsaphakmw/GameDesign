@@ -21,6 +21,9 @@ public class Interactor : MonoBehaviour
 
         if (_numFound > 0)
         {
+            if (_interactableMask == (1 << LayerMask.NameToLayer("Player"))){
+                if (!_interactionPromptUI.IsDisplayed) _interactionPromptUI.SetUp("-");
+            }
            _interactable = _colliders[0].GetComponent<IInteractable>();
 
               if (_interactable != null)

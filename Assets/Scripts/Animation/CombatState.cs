@@ -8,6 +8,8 @@ public class CombatState : State
     bool sheathWeapon;
     float playerSpeed;
     bool attack;
+    AudioSource drawWeaponSound;
+    AudioSource attackSound;
 
     Vector3 cVelocity;
 
@@ -15,6 +17,8 @@ public class CombatState : State
     {
         character = _character;
         stateMachine = _stateMachine;
+        drawWeaponSound = character.GetComponent<AudioSource>();
+        attackSound = character.GetComponent<AudioSource>();
     }
 
     public override void Enter(){
@@ -45,6 +49,7 @@ public class CombatState : State
         if (attackAction.triggered)
         {
             attack = true;
+            attackSound.Play();
         }
 
         input = moveAction.ReadValue<Vector2>();

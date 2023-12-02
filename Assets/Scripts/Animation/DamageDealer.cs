@@ -51,6 +51,7 @@ public class DamageDealer : MonoBehaviour
 
     void DealDamage(EnemyController enemy)
     {
+        Debug.Log("Enemy " + enemy.name);
         enemy.TakeDamage(weaponDamage);
     }
 }

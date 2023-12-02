@@ -5,10 +5,13 @@ public class AttackState : State
     float clipLength;
     float clipSpeed;
     bool attack;
+    AudioSource attackSound;
+    AudioSource drawWeaponSound;
     public AttackState(PlayerController _character, StateMachine _stateMachine) : base(_character, _stateMachine)
     {
         character = _character;
         stateMachine = _stateMachine;
+        attackSound = character.GetComponent<AudioSource>();
     }
  
     public override void Enter()
@@ -42,11 +45,13 @@ public class AttackState : State
         if (timePassed >= clipLength / clipSpeed && attack)
         {
             stateMachine.ChangeState(character.attacking);
+            attackSound.Play();
         }
         if (timePassed >= clipLength / clipSpeed)
         {
             stateMachine.ChangeState(character.combatting);
             character.animator.SetTrigger("move");
+            drawWeaponSound.Play();
         }
  
     }

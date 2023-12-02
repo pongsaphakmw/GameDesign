@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public AttackState attacking;
     // public CrouchingState crouching;
     public Animator animator;
+    public AudioSource attackSound;
+    public AudioSource drawWeaponSound;
     public Vector3 playerVelocity;
     [HideInInspector]
     public PlayerInput playerInput;
@@ -70,6 +72,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Player is dead");
         }
 
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log("Current health: " + currentHealth);
+        }
+
         if (Input.GetKeyDown(KeyCode.U))
         {
             // Debug.Log("U key was pressed.");
@@ -93,7 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
-        // Debug.Log("Current Health: " + currentHealth);
+        Debug.Log("Current Health: " + currentHealth);
         // Debug.Log("Current Mana: " + currentMana);
     }
     public void SkillUsed(int mana)

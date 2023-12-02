@@ -11,12 +11,17 @@ public class EnemyController : MonoBehaviour
     public float rotationDampTime = 0.2f;
     public float attackRange;
     public float lookRadius = 5f;
+    public float attackDelay = 2f;
     public CharacterObject character;
     public HealthBar healthBar;
     public Animator animator;
+    public bool isBoss;
     private int currentHealth;
+    private bool isAttacking = false;
     Transform target;
     NavMeshAgent agent;
+    [SerializeField]
+    PlayerController player;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +29,7 @@ public class EnemyController : MonoBehaviour
         currentHealth = character.characterHealth;
         healthBar.SetMaxHealth(character.characterHealth);
         target = PlayerManager.instance.player.transform;
+        player = PlayerManager.instance.player.GetComponent<PlayerController>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -33,6 +39,10 @@ public class EnemyController : MonoBehaviour
         if (currentHealth <= 0)
         {
             Destroy(gameObject);
+            if (isBoss)
+            {
+                Debug.Log("You Win");
+            }
         }
 
         float distance = Vector3.Distance(target.position, transform.position);
@@ -40,11 +50,21 @@ public class EnemyController : MonoBehaviour
         if (distance <= lookRadius)
         {
             agent.SetDestination(target.position);
-            if (distance <= agent.stoppingDistance)
-            {
+            
+                if (distance <= attackRange)
+                {
+                    if (!isAttacking)
+                    {
+                        isAttacking = true;
+                        StartCoroutine(AttackWithDelay(attackDelay));
+                    }
+                }
+                
                 FaceTarget();
-            }
+            
         }
+        
+
     }
 
     public void TakeDamage(float damage)
@@ -55,13 +75,25 @@ public class EnemyController : MonoBehaviour
         Debug.Log("Current Health: " + currentHealth);
     }
     public void Attack()
+{
+    Debug.Log("Enemy Attacked");
+    if (player != null && Vector3.Distance(transform.position, player.transform.position) <= attackRange)
     {
-        Debug.Log("Enemy Attacked");
+        player.TakeDamage(character.characterDamage);
     }
+}
+    IEnumerator AttackWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Attack();
+        isAttacking = false;
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, lookRadius);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
     void FaceTarget()
